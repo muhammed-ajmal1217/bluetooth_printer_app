@@ -23,9 +23,14 @@ class HomePage extends StatelessWidget {
         actions: [
           Padding(
             padding: const EdgeInsets.only(right: 10),
-            child: CircleAvatar(
-              backgroundColor: bluetoothProvider.connected?const Color.fromARGB(255, 93, 171, 235):Colors.transparent,
-              child: Icon(Icons.bluetooth_connected_outlined,color: Colors.white,),
+            child: InkWell(
+              onTap: () {
+                bluetoothProvider.connected?bluetoothProvider.disconnect():bluetoothProvider.connectToDevice();
+              },
+              child: CircleAvatar(
+                backgroundColor: bluetoothProvider.connected?const Color.fromARGB(255, 93, 171, 235):Colors.transparent,
+                child: Icon(Icons.bluetooth_connected_outlined,color: Colors.white,),
+              ),
             ),
           )
         ],
@@ -37,6 +42,7 @@ class HomePage extends StatelessWidget {
             DropdownButton<BluetoothDevice>(
                 hint: Text("Device",style: TextStyle(color: Colors.white),),
                 value: bluetoothProvider.selectedDevice,
+                dropdownColor: Color.fromARGB(255, 23, 106, 144),
                 onChanged: (BluetoothDevice? value) {
                   bluetoothProvider.setSelectedDevice(value);
                 },
@@ -161,9 +167,12 @@ class HomePage extends StatelessWidget {
             Padding(
               padding: const EdgeInsets.all(8.0),
               child: InkWell(
-                onTap: bluetoothProvider.connected
-                  ? () => bluetoothProvider.printReceipt(receiptController)
-                   : null,
+                onTap: (){
+                  bluetoothProvider.connected
+                  ?  bluetoothProvider.printReceipt(receiptController)
+                   : null;
+                   bluetoothProvider.items.clear();
+                },
                 child: Container(
                   height: 50,
                   width: double.infinity,
